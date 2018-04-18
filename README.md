@@ -61,7 +61,7 @@ $make styles
 
 ### Prettier
 整形ツールとして [CSScomb](http://csscomb.com) を採用しています。基本的なruleのみ記述しています。  
-sort-orderはは社内ルールが決まり次第書いていきましょう.
+sort-orderは社内ルールが決まり次第書いていきましょう.
 
 #### 参考記事
 [【Grunt】csscombでソートだけでなくインデントなどのフォーマットも整形する \| バシャログ。](http://bashalog.c-brains.jp/14/12/01-202258.php)
