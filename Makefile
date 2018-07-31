@@ -18,3 +18,7 @@ styles:
 # jsのコンパイル.
 scripts:
 	gulp scripts
+
+# js dllのコンパイル.
+scripts-dll:
+	gulp scripts.dll

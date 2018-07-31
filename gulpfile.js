@@ -11,6 +11,15 @@ const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 
 
+gulp.task('server', () => {
+  browserSync.init({
+    server: {
+      baseDir: "./web"
+    }
+  });
+});
+
+
 gulp.task('styles', () => {
   gulp.src('web/src/styles/index.scss')
     .pipe(plumber())
@@ -28,23 +37,32 @@ gulp.task('styles', () => {
 });
 
 
-gulp.task('scripts', () => {
-  const webpackConfig = require('./webpack.config');
-
-  webpackStream(webpackConfig, webpack)
-    .pipe(plumber())
-    .pipe(gulp.dest('./web/assets/js'))
-    .pipe(browserSync.stream());
-});
-
-
-gulp.task('default', () => {
-  browserSync.init({
-    server: {
-      baseDir: "./web"
+gulp.task('scripts.dll', function(callback) {
+  const webpackConfig = require("./webpack.dll.config");
+  webpack(webpackConfig).run((err, stats) => {
+    if (err) {
+      throw err;
     }
-  });
 
-  gulp.watch('web/src/styles/**/*.scss', ['styles']);
-  gulp.watch('web/src/scripts/**/*.js', ['scripts']);
+    console.log(stats.toString('minimal'));
+
+    callback();
+  });
 });
+
+
+gulp.task('scripts', function() {
+  const webpackConfig = require("./webpack.config");
+  return gulp.src('./web/src/scripts/common.js')
+    .pipe(webpackStream(webpackConfig, webpack))
+    .pipe(plumber())
+    .pipe(gulp.dest('./web/assets/js'));
+});
+
+
+gulp.task('watch', () => {
+  gulp.watch('web/src/styles/**/*.scss', ['styles']);
+});
+
+
+gulp.task('default', ['server', 'watch', 'scripts.dll', 'scripts']);

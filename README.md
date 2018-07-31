@@ -71,9 +71,12 @@ sort-orderは社内ルールが決まり次第書いていきましょう.
 ## JavaScript
 作業ディレクトリ: `web/src/scripts`   
     
-`index.js` をエントリーポイントとします。
+`common.js` をエントリーポイントとします。
 パッケージは基本的に `yarn` で入れられるパッケージはyarnでaddした上で、require or importすることを推奨します。   
-このboilerplateでは実際に、 `jQuery` をその方法でrequireしていますので、`index.js` を参考にしてみて下さい.
+このboilerplateでは実際に、 `jQuery` をその方法でrequireしていますので、`common.js` を参考にしてみて下さい.   
+
+また、webpackのbuild軽量化のために、外部ライブラリはdllとしてコンパイルされるようになっています。
+ライブラリの追加時は、 `webpack.dll.config` の `vendor` にpluginを追加した上で、 `make scripts-dll` を実行してください.
 
 
 ### コンパイル方法
@@ -100,14 +103,7 @@ $make scripts
 #### libs
 npmにないようなライブラリ、パッケージはここに入れて下さい。そして、必要なページでここからrequireして下さい。
 
-### Lint
-[ESLint](https://eslint.org)を採用しています。また、 AirbnbのStyle Guideを導入できるモジュールもextendしていますので、厳格なチェックが期待されます。   
-
-#### 参考記事
-[airbnb/javascript: JavaScript Style Guide](https://github.com/airbnb/javascript)
-[AtomにESLint導入した \- Qiita](https://qiita.com/HisakoIsaka/items/40966a0c78846f4053c9)
-
 
 ## ドキュメント情報
 作成者: 岩本 大樹 <iwamoto@cshool.jp>  
-更新日: 2018/04/18
+更新日: 2018/07/31
