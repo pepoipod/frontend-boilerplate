@@ -34,7 +34,7 @@ module.exports = {
       manifest: require('./.dll/vendor-manifest.json')
     }),
     function () {
-      this.plugin('watch-run', (watching, callback) => {
+      this.hooks.watchRun.tapAsync('MyWatchRunPlugin', (watching, callback) => {
         console.log('\033[36m' + 'Begin compile at ' + new Date() + ' \033[39m')
         callback()
       })
