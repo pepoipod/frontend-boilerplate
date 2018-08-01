@@ -11,7 +11,7 @@ const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 
 
-gulp.task('server', () => {
+gulp.task('server', ['styles', 'scripts'], () => {
   browserSync.init({
     server: {
       baseDir: "./web"
@@ -51,7 +51,7 @@ gulp.task('scripts.dll', function(callback) {
 });
 
 
-gulp.task('scripts', function() {
+gulp.task('scripts', ['scripts.dll'], function () {
   const webpackConfig = require("./webpack.config");
   return gulp.src('./web/src/scripts/common.js')
     .pipe(webpackStream(webpackConfig, webpack))
@@ -65,4 +65,4 @@ gulp.task('watch', () => {
 });
 
 
-gulp.task('default', ['server', 'watch', 'scripts.dll', 'scripts']);
+gulp.task('default', ['server', 'watch']);
