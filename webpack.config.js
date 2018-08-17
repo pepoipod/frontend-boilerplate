@@ -4,6 +4,7 @@ const path = require('path');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const threadLoader = require('thread-loader');
 const webpack = require('webpack');
+const WriteFilePlugin = require('write-file-webpack-plugin');
 
 
 const jsWorkerOptions = {
@@ -39,6 +40,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'css/[name].css'
     }),
+    new WriteFilePlugin(),
     function () {
       this.hooks.watchRun.tapAsync('MyWatchRunPlugin', (watching, callback) => {
         console.log('\033[36m' + 'Begin compile at ' + new Date() + ' \033[39m');
