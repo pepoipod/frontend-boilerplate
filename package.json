@@ -1,29 +1,33 @@
 {
   "private": true,
   "scripts": {
-    "start": "gulp"
+    "start": "npx webpack-dev-server --inline",
+    "build": "npx webpack -p",
+    "postinstall": "npx webpack --config ./webpack.dll.config.js"
   },
   "dependencies": {
     "jquery": "^3.3.1",
     "sanitize.css": "^5.0.0"
   },
   "devDependencies": {
+    "autoprefixer": "^9.1.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "browser-sync": "^2.23.6",
     "cache-loader": "^1.2.2",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^5.0.0",
-    "gulp-clean-css": "^3.9.3",
-    "gulp-plumber": "^1.2.0",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.4",
-    "node-sass-package-importer": "^5.1.1",
+    "css-loader": "^1.0.0",
+    "css-mqpacker": "^7.0.0",
+    "cssnano": "^4.0.5",
+    "mini-css-extract-plugin": "^0.4.1",
+    "node-sass": "^4.9.3",
+    "postcss-loader": "^3.0.0",
     "progress-bar-webpack-plugin": "^1.11.0",
+    "sass-loader": "^7.1.0",
     "thread-loader": "^1.2.0",
     "webpack": "^4.1.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5",
     "webpack-stream": "^4.0.2"
   },
   "license": "MIT"

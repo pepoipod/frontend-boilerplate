@@ -5,20 +5,17 @@ all:
 
 # projectのセットアップ
 setup:
-	yarn install
+	yarn
 
 # サーバー起動.
 run:
-	gulp
+	yarn start
 
-# cssのコンパイル.
-styles:
-	gulp styles
-
-# jsのコンパイル.
-scripts:
-	gulp scripts
+# production build.
+build:
+	yarn build
 
 # js dllのコンパイル.
-scripts-dll:
-	gulp scripts.dll
+rebuild-scripts-dll:
+	rm -f ./.dll/vendor-manifest.json ./web/assets/js/vendor.dll.js
+	npx webpack --config ./webpack.dll.config.js

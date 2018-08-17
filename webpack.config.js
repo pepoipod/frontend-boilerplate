@@ -1,8 +1,9 @@
+const chalk = require('chalk');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const threadLoader = require('thread-loader');
 const webpack = require('webpack');
-const chalk = require('chalk');
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 
 const jsWorkerOptions = {
@@ -16,27 +17,32 @@ threadLoader.warmup(jsWorkerOptions, ['babel-loader']);
 
 
 module.exports = {
-  mode: 'production',
-  watch: true,
+  mode: process.env.NODE_ENV || "development",
+  watch: false,
   watchOptions: {
     ignored: /node_modules/
   },
   devtool: 'source-map',
   entry: {
-    index: ['babel-polyfill', './web/src/scripts/common.js']
+    index: ['babel-polyfill', './web/src/scripts/index.js']
   },
   output: {
-    filename: '[name].js'
+    path: path.join(__dirname, './web/assets'),
+    publicPath: '/assets',
+    filename: 'js/[name].js'
   },
   plugins: [
     new webpack.DllReferencePlugin({
       context: __dirname,
       manifest: require('./.dll/vendor-manifest.json')
     }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css'
+    }),
     function () {
       this.hooks.watchRun.tapAsync('MyWatchRunPlugin', (watching, callback) => {
-        console.log('\033[36m' + 'Begin compile at ' + new Date() + ' \033[39m')
-        callback()
+        console.log('\033[36m' + 'Begin compile at ' + new Date() + ' \033[39m');
+        callback();
       })
     },
     new ProgressBarPlugin({
@@ -46,10 +52,43 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              url: false,
+              sourceMap: true,
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              plugins: [
+                require('autoprefixer')({
+                  grid: true,
+                  browsers: ['last 2 versions']
+                }),
+                require('cssnano'),
+                require('css-mqpacker'),
+              ]
+            }
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true,
+            }
+          }
+        ]
+      },
+      {
         test: /\.js$/,
         use: [
-          {loader: 'cache-loader'},
-          {loader: 'thread-loader', options: jsWorkerOptions},
+          { loader: 'cache-loader' },
+          { loader: 'thread-loader', options: jsWorkerOptions },
           {
             loader: 'babel-loader?cacheDirectory',
             options: {
@@ -58,7 +97,7 @@ module.exports = {
                   'env',
                   {
                     modules: false,
-                    targets: {browsers: ['last 2 versions', 'safari >= 7']}
+                    targets: { browsers: ['last 2 versions', 'safari >= 7'] }
                   }
                 ]
               ]
@@ -67,5 +106,9 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'web'),
+    port: 8080,
+  },
 };
