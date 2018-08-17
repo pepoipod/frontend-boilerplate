@@ -37,13 +37,13 @@ $make run
 ### ビルド
 
 ```bash
-$yarn start
+$yarn build
 ```
 
 or
 
 ```bash
-$make run
+$make build
 ```
 
 稀に自動で終了しない時があるので、その際はビルドの完了を確認した後に `Ctrl + C` と入力してください。
