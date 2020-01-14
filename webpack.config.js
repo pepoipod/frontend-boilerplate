@@ -25,7 +25,7 @@ module.exports = {
   },
   devtool: 'source-map',
   entry: {
-    index: ['babel-polyfill', './web/src/scripts/index.js']
+    index: ['./web/src/scripts/index.js']
   },
   output: {
     path: path.join(__dirname, './web/assets'),
@@ -71,7 +71,6 @@ module.exports = {
               plugins: [
                 require('autoprefixer')({
                   grid: true,
-                  browsers: ['last 2 versions']
                 }),
                 require('cssnano'),
                 require('css-mqpacker'),
@@ -88,6 +87,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
+        exclude: /node_modules/,
         use: [
           { loader: 'cache-loader' },
           { loader: 'thread-loader', options: jsWorkerOptions },
@@ -95,13 +95,10 @@ module.exports = {
             loader: 'babel-loader?cacheDirectory',
             options: {
               presets: [
-                [
-                  'env',
-                  {
-                    modules: false,
-                    targets: { browsers: ['last 2 versions', 'safari >= 7'] }
-                  }
-                ]
+                ['@babel/preset-env', {
+                  useBuiltIns: "usage",
+                  corejs: 3
+                }]
               ]
             }
           }
